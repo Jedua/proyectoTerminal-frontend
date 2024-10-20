@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { CategoriaService } from '../services/categoria.service';
 
 @Component({
   selector: 'app-registrarse-usuario',
@@ -10,36 +10,40 @@ import { Router } from '@angular/router';
   templateUrl: './registrarse-usuario.component.html',
   styleUrls: ['./registrarse-usuario.component.css']
 })
-export class RegistrarseUsuarioComponent {
+export class RegistrarseUsuarioComponent implements OnInit {
   user = {
     tipoUsuario: '',
     nombre: '',
     apellidos: '',
-    correo: '',
     fecha_nacimiento: '',
     direccion: '',
     telefono: '',
-    categoria: '',  // Solo para delegado
-    equipo: '',     // Solo para jugador
-    contrasena: ''
+    correo: '',
+    contrasena: '',
+    nombre_equipo: '',
+    categoria: '',
+    sexo: '',
+    equipo: ''
   };
 
-  constructor(private router: Router) {}
+  tiposUsuario = ['jugador', 'delegado'];
+  categorias: any[] = []; // Aquí se guardarán las categorías obtenidas del backend
 
-  onSubmit() {
-    console.log('Datos del usuario:', this.user);
+  constructor(private categoriaService: CategoriaService) {}
 
-    // Aquí puedes hacer la llamada al servicio para registrar el usuario según su tipo
-    // Ejemplo:
-    if (this.user.tipoUsuario === 'jugador') {
-      // Lógica para registrar un jugador
-      console.log('Registrando Jugador:', this.user);
-    } else if (this.user.tipoUsuario === 'delegado') {
-      // Lógica para registrar un delegado
-      console.log('Registrando Delegado:', this.user);
-    }
+  ngOnInit(): void {
+    this.categoriaService.getCategorias().subscribe(
+      (data) => {
+        this.categorias = data;
+      },
+      (error) => {
+        console.error('Error al obtener las categorías', error);
+      }
+    );
+  }
 
-    // Redireccionar después de registrar
-    // this.router.navigate(['/']);
+  onSubmit(): void {
+    console.log('Formulario enviado', this.user);
+    // Lógica adicional para manejar el registro del usuario
   }
 }

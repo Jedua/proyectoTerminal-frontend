@@ -2,13 +2,12 @@
   <h1>Registrar Usuario</h1>
   <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
     
-    <!-- Selección del tipo de usuario -->
+    <!-- Selección de tipo de usuario -->
     <div class="form-group">
       <label for="tipoUsuario">Tipo de Usuario</label>
       <select id="tipoUsuario" [(ngModel)]="user.tipoUsuario" name="tipoUsuario" required class="form-control">
         <option value="">Seleccione un tipo de usuario</option>
-        <option value="jugador">Jugador</option>
-        <option value="delegado">Delegado</option>
+        <option *ngFor="let tipo of tiposUsuario" [value]="tipo">{{ tipo | titlecase }}</option>
       </select>
     </div>
 
@@ -21,11 +20,6 @@
     <div class="form-group">
       <label for="apellidos">Apellidos</label>
       <input type="text" id="apellidos" [(ngModel)]="user.apellidos" name="apellidos" required class="form-control">
-    </div>
-
-    <div class="form-group">
-      <label for="correo">Correo Electrónico</label>
-      <input type="email" id="correo" [(ngModel)]="user.correo" name="correo" required class="form-control">
     </div>
 
     <div class="form-group">
@@ -43,21 +37,54 @@
       <input type="text" id="telefono" [(ngModel)]="user.telefono" name="telefono" class="form-control">
     </div>
 
-    <!-- Campos adicionales para Delegado -->
-    <div class="form-group" *ngIf="user.tipoUsuario === 'delegado'">
-      <label for="categoria">Categoría</label>
-      <input type="text" id="categoria" [(ngModel)]="user.categoria" name="categoria" class="form-control">
-    </div>
-
-    <!-- Campos adicionales para Jugador -->
-    <div class="form-group" *ngIf="user.tipoUsuario === 'jugador'">
-      <label for="equipo">Equipo</label>
-      <input type="text" id="equipo" [(ngModel)]="user.equipo" name="equipo" class="form-control">
+    <div class="form-group">
+      <label for="correo">Correo Electrónico</label>
+      <input type="email" id="correo" [(ngModel)]="user.correo" name="correo" required class="form-control">
     </div>
 
     <div class="form-group">
       <label for="contrasena">Contraseña</label>
       <input type="password" id="contrasena" [(ngModel)]="user.contrasena" name="contrasena" required class="form-control">
+    </div>
+
+    <!-- Campos adicionales para Delegado -->
+    <div class="form-group" *ngIf="user.tipoUsuario === 'delegado'">
+      <label for="nombre_equipo">Nombre de tu equipo</label>
+      <input type="text" id="nombre_equipo" [(ngModel)]="user.nombre_equipo" name="nombre_equipo" class="form-control">
+    </div>
+
+    <div class="form-group" *ngIf="user.tipoUsuario === 'delegado'">
+      <label for="categoria">Categoría</label>
+      <select id="categoria" [(ngModel)]="user.categoria" name="categoria" class="form-control">
+        <option value="">Seleccione una categoría</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria.idcategoria">{{ categoria.nombre }}</option>
+      </select>
+    </div>
+
+    <!-- Campos adicionales para Jugador -->
+    <div class="form-group" *ngIf="user.tipoUsuario === 'jugador'">
+      <label for="sexo">Sexo</label>
+      <select id="sexo" [(ngModel)]="user.sexo" name="sexo" required class="form-control">
+        <option value="">Seleccione su sexo</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="user.tipoUsuario === 'jugador'">
+      <label for="categoria">Categoría</label>
+      <select id="categoria" [(ngModel)]="user.categoria" name="categoria" required class="form-control">
+        <option value="">Seleccione una categoría</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria.idcategoria">{{ categoria.nombre }}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="user.tipoUsuario === 'jugador'">
+      <label for="equipo">Equipo</label>
+      <select id="equipo" [(ngModel)]="user.equipo" name="equipo" class="form-control">
+        <option value="">Sin equipo</option>
+        <!-- Opciones de equipos disponibles -->
+      </select>
     </div>
 
     <button type="submit" class="btn-primary">Registrar</button>
