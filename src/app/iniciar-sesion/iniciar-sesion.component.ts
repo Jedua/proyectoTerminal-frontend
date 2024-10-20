@@ -22,4 +22,5 @@ export class IniciarSesionComponent {
     console.log('Formulario enviado', this.credentials);
     this.router.navigate(['/']);
   }
+  
 }
