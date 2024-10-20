@@ -1,0 +1,38 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+.nav-links, .auth-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li, .auth-links li {
+  margin: 0 10px;
+}
+
+.nav-links a, .auth-links a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+a:hover {
+  cursor: pointer;
+  color: #0055a5 !important; /* Cambia el color del enlace al pasar el cursor */
+  text-decoration: underline !important; /* Subraya el enlace al pasar el cursor */
+}
+
+
+.auth-links {
+  margin-right: 10px;
+}
+
+.title {
+  padding-top: 20px;
+}
