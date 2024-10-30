@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CategoriaService } from '../services/categoria.service';
+import { RegistroService } from '../services/registro.service';
 
 @Component({
   selector: 'app-registrarse-usuario',
@@ -10,40 +10,48 @@ import { CategoriaService } from '../services/categoria.service';
   templateUrl: './registrarse-usuario.component.html',
   styleUrls: ['./registrarse-usuario.component.css']
 })
-export class RegistrarseUsuarioComponent implements OnInit {
+export class RegistrarseUsuarioComponent {
   user = {
-    tipoUsuario: '',
     nombre: '',
     apellidos: '',
-    fecha_nacimiento: '',
+    correo: '',
     direccion: '',
     telefono: '',
-    correo: '',
-    contrasena: '',
-    nombre_equipo: '',
-    categoria: '',
+    fecha_nacimiento: '',
     sexo: '',
-    equipo: ''
+    usuario: '',
+    pass: '',
+    validar_contrasena: ''
   };
 
-  tiposUsuario = ['jugador', 'delegado'];
-  categorias: any[] = []; // Aquí se guardarán las categorías obtenidas del backend
+  errorMessage = '';
+  passwordsMatch = true;
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(private registroService: RegistroService) {}
 
-  ngOnInit(): void {
-    this.categoriaService.getCategorias().subscribe(
-      (data) => {
-        this.categorias = data;
-      },
-      (error) => {
-        console.error('Error al obtener las categorías', error);
-      }
-    );
+  // Método para verificar si las contraseñas coinciden
+  checkPasswordsMatch(): void {
+    this.passwordsMatch = this.user.pass === this.user.validar_contrasena;
+    this.errorMessage = this.passwordsMatch ? '' : 'Las contraseñas no coinciden';
   }
 
   onSubmit(): void {
-    console.log('Formulario enviado', this.user);
-    // Lógica adicional para manejar el registro del usuario
+    if (!this.passwordsMatch) {
+      return;
+    }
+
+    // Excluir 'validar_contrasena' antes de enviar al backend
+    const { validar_contrasena, ...userData } = this.user;
+
+    this.registroService.registrarUsuario(userData).subscribe(
+      (response) => {
+        console.log('Usuario registrado exitosamente', response);
+        this.errorMessage = ''; // Limpia el mensaje de error si se registra con éxito
+      },
+      (error) => {
+        console.error('Error al registrar usuario', error);
+        this.errorMessage = 'Error al registrar usuario. Inténtalo nuevamente.';
+      }
+    );
   }
 }
