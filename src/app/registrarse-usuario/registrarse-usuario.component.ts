@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegistroService } from '../services/registro.service';
+import { Router } from '@angular/router';  // Importa Router
 
 @Component({
   selector: 'app-registrarse-usuario',
@@ -27,7 +28,7 @@ export class RegistrarseUsuarioComponent {
   errorMessage = '';
   passwordsMatch = true;
 
-  constructor(private registroService: RegistroService) {}
+  constructor(private registroService: RegistroService, private router: Router) {}  // Inyecta Router
 
   // Método para verificar si las contraseñas coinciden
   checkPasswordsMatch(): void {
@@ -40,16 +41,19 @@ export class RegistrarseUsuarioComponent {
       return;
     }
 
-    // Excluir 'validar_contrasena' antes de enviar al backend
     const { validar_contrasena, ...userData } = this.user;
 
     this.registroService.registrarUsuario(userData).subscribe(
       (response) => {
         console.log('Usuario registrado exitosamente', response);
-        this.errorMessage = ''; // Limpia el mensaje de error si se registra con éxito
+        this.errorMessage = '';
+        window.alert('Registro exitoso. Ahora puedes iniciar sesión.');
+
+        // Redireccionar al inicio de sesión
+        this.router.navigate(['/iniciar-sesion']);
       },
       (error) => {
-        console.error('Error al registrar usuario', error);
+        console.error('Error al registrar usuario ', error);
         this.errorMessage = 'Error al registrar usuario. Inténtalo nuevamente.';
       }
     );

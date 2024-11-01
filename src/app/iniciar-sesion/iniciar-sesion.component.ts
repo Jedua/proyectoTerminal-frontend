@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';  // Asegúrate de importar FormsMo
 })
 export class IniciarSesionComponent {
   credentials = {
-    email: '',
+    usuario: '',
     password: ''
   };
 
