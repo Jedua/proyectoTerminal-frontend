@@ -1,17 +1,18 @@
 <nav>
   <div class="logo">
-      <img src="assets/images/logos/logo.jpg" alt="Logo Lion League" />
-      <span class="title">Lion League</span>
+    <img src="assets/images/logos/logo.jpg" alt="Logo Lion League" />
+    <span class="title">Lion League</span>
   </div>
   <ul class="nav-links">
-      <li><a routerLink="/">Inicio</a></li>  <!-- Cambiado a routerLink -->
-      <li><a routerLink="/categorias">Categorías</a></li>
-      <li><a routerLink="/equipos">Equipos</a></li>
-      <li><a routerLink="/horarios">Horarios</a></li>
-      <li><a routerLink="/multimedia">Multimedia</a></li>
+    <li><a routerLink="/">Inicio</a></li>
+    <li><a routerLink="/categorias">Categorías</a></li>
+    <li><a routerLink="/equipos">Equipos</a></li>
+    <li><a routerLink="/horarios">Horarios</a></li>
+    <li><a routerLink="/multimedia">Multimedia</a></li>
   </ul>
   <ul class="auth-links">
-      <li><a routerLink="/iniciar-sesion">Iniciar Sesión</a></li>  <!-- Cambiado a routerLink -->
-      <li><a routerLink="/registrarse">Registrarse</a></li>
+    <li *ngIf="!authService.isAuthenticated()"><a routerLink="/iniciar-sesion">Iniciar Sesión</a></li>
+    <li *ngIf="!authService.isAuthenticated()"><a routerLink="/registrarse">Registrarse</a></li>
+    <li *ngIf="authService.isAuthenticated()"><a (click)="logout()">Cerrar Sesión</a></li>
   </ul>
 </nav>

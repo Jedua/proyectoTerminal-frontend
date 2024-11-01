@@ -1,32 +1,54 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://api.lionleague.com/auth';  // Cambia la URL al endpoint de tu API
+  private apiUrl = 'https://localhost:3000/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object // Para detectar el entorno
+  ) {}
 
-  // Método para iniciar sesión, envía las credenciales al backend
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+  // Método para iniciar sesión
+  login(credentials: { usuario: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/iniciar-sesion`, credentials).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          this.saveToken(response.token);
+        }
+      })
+    );
   }
 
-  // Guardar el token en el localStorage (o sessionStorage según sea necesario)
+  // Guardar el token solo si estamos en el navegador
   saveToken(token: string): void {
-    localStorage.setItem('token', token);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', token);
+    }
   }
 
-  // Obtener el token del localStorage
+  // Obtener el token solo si estamos en el navegador
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
-  // Cerrar sesión (remover el token del localStorage)
+  // Cerrar sesión
   logout(): void {
-    localStorage.removeItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+    }
+  }
+
+  // Verifica si el usuario está autenticado
+  isAuthenticated(): boolean {
+    return !!this.getToken();
   }
 }

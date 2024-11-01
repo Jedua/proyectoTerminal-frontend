@@ -2,13 +2,14 @@
   <h1>Iniciar Sesión</h1>
   <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
     <div class="form-group">
-      <label for="email">Correo Electrónico</label>
-      <input type="email" id="email" [(ngModel)]="credentials.email" name="email" required class="form-control">
+      <label for="user">Usuario</label>
+      <input type="text" id="user" [(ngModel)]="credentials.usuario" name="user" required class="form-control">
     </div>
     <div class="form-group">
       <label for="password">Contraseña</label>
       <input type="password" id="password" [(ngModel)]="credentials.password" name="password" required class="form-control">
     </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     <button type="submit" class="btn-primary">Iniciar Sesión</button>
   </form>
 </div>
